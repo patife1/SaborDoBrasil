@@ -1,147 +1,320 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
- crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sabor do Brasil</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
-<body>
-    <main>
-        <!-- Corpo -->
-        <div class="container-fluid text-center">
-            <div class="row">
-                <!-- Lado esquerdo da página -->
-              <div class="col">
-                <div class="container-fluid text-center">
-                    <!-- Imagem -->
-                    <div class="row">
-                        <div class="col">
-                                <img src="img\logo.png" alt="" class="imagem-redonda">                                
-                        </div>
-                    </div>
-                    <!-- Nome -->
-                    <div class="row">
-                        <div class="col">
-                            Sabor Brasil
-                        </div>
-                    </div>
-                    <!-- Divisão -->
-                    <div class="row" style="border: 2px solid #D97014;">
-                    </div>
-                    <!-- Like e deslike -->
-                    <div class="row">
-                        <div class="col">
-                            1
-                        </div>
-                        <div class="col">
-                            2
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            like
-                        </div>
-                        <div class="col">
-                            deslike
-                        </div>
-                    </div>
-                </div>
-              </div> 
-              <!-- Centro -->
-              <div class="col-6">
-                <div class="row">
-                    <div class="col" style="border: 2px solid #C2BEBE;">
-                        <h1>Publicações</h1>
-                    </div>   
-                </div>
-                <div class="row">
-                    <div class="col borda">
-                        <div class="row" >
-                            <div class="col" style="text-align: left;">
-                                <h2>Título do prato 01</h2>
-                            </div>                       
-                        </div>
-                        <div class="row">
-                            <div class="col ">
-                                <img src="img\teste01.jpg" alt="" class="conter-img">
-                            </div>   
-                        </div>
-                        <div class="row ">
-                            <div class="col " style="text-align: left;">
-                                Local01
-                            </div>
-                            <div class="col" style="text-align: right;">
-                                Mg-ipatinga
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1" style="text-align: left;">
-                                01
-                            </div>
-                            <div class="col-1">
-                                O
-                            </div>
-                            <div class="col-1" style="text-align: left;">
-                                02
-                            </div>
-                            <div class="col-1">
-                                L
-                            </div>
-                            <div class="col-6">
+<body> 
 
-                            </div>
-                            <div class="col-1">
-                                P
-                            </div> 
-                            <div class="col-1" style="text-align: right;">
-                                02
-                            </div>   
-                        </div>
-                        <div class="row"></div>
-                    </div>
-                </div>
-                
-              </div>
-              <div class="col">
-                <button type="button" href="" class="btn btn-primary" data-bs-toggle="modal" 
-                data-bs-target="#loginModal" style="background-color: #D97014; border-color: #D97014; width: 80%; position: relative; top: 10%;">Entrar</button>
-                <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Login</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">E-mail</label>
-                                        <input type="email" class="form-control" id="email">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="senha" class="form-label">Senha</label>
-                                        <input type="password" class="form-control" id="senha">
-                                    </div>
-                                    <div style="overflow: hidden;">
-                                        <button type="submit" class="btn btn-dark" style="float: left; background-color: #fff; border: 2px solid #D97014; color: #0000;">Cancelar</button>
-                                        <button type="submit" class="btn btn-primary" style="float: right; background-color: #D97014; border: 2px solid #D97014;">Entrar</button>
-                                    </div>                                  
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-            </div>           
-          </div>   
-    </main>
-    <footer>
-        text
-       
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+  <!-- Modal de Login -->
+<div id="modal-login" class="modal-login d-none">
+  <div class="modal-content">
+    <h2 class="mb-3">Login</h2>
+    <div class="mb-3">
+      <label for="email" class="form-label">E-mail</label>
+      <input type="email" id="email" class="form-control" placeholder="Digite seu e-mail" />
+      <small class="text-danger d-none" id="erro-email">E-mail inválido</small>
+    </div>
+    <div class="mb-3">
+      <label for="senha" class="form-label">Senha</label>
+      <input type="password" id="senha" class="form-control" placeholder="Digite sua senha" />
+      <small class="text-danger d-none" id="erro-senha">Senha inválida</small>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-outline-warning" onclick="fecharModalLogin()">Cancelar</button>
+      <button class="btn btn-warning text-white" onclick="validarLogin()">Entrar</button>
+    </div>
+    <p id="erro-credenciais" class="text-danger mt-2 d-none">Usuário ou senha incorreto</p>
+    <p class="mt-3">Não tem conta? <a href="#" onclick="abrirModalCadastro()">Cadastre-se</a></p>
+  </div>
+</div>
+
+<!-- Modal de Cadastro -->
+<div id="modal-cadastro" class="modal-login d-none">
+  <div class="modal-content">
+    <h2 class="mb-3">Cadastro</h2>
+    <div class="mb-3">
+      <label for="nome-cadastro" class="form-label">Nome</label>
+      <input type="text" id="nome-cadastro" class="form-control" placeholder="Digite seu nome completo" />
+    </div>
+    <div class="mb-3">
+      <label for="email-cadastro" class="form-label">E-mail</label>
+      <input type="email" id="email-cadastro" class="form-control" placeholder="Digite seu e-mail" />
+    </div>
+    <div class="mb-3">
+      <label for="senha-cadastro" class="form-label">Senha</label>
+      <input type="password" id="senha-cadastro" class="form-control" placeholder="Crie uma senha" />
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-outline-warning" onclick="fecharModalCadastro()">Cancelar</button>
+      <button class="btn btn-warning text-white" onclick="cadastrarUsuario()">Cadastrar</button>
+    </div>
+    <p id="erro-cadastro" class="text-danger mt-2 d-none">Preencha todos os campos corretamente.</p>
+  </div>
+</div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="tex navbar-brand" href="#">
+        <img src="./img/logo_sabor_do_brasil.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+        Sabor do Brasil
+      </a>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+    <div class="container-fluid mt-4 fundo-publicacoes"> 
+    <div class="row">
+      
+      <!-- Coluna 1: Perfil -->
+      <aside class="col-md-3 perfil text-center">
+        <img src="./img/logo_sabor_do_brasil.png" alt="#" class="logo mb-3" />
+        <h2>Sabor do Brasil</h2>
+        <div class="linha-laranja mx-auto my-3"></div>
+        <p><strong>Likes Gerais:</strong> <span id="likes-gerais">0</span></p>
+        <p><strong>Dislikes Gerais:</strong> <span id="dislikes-gerais">0</span></p>
+      </aside>
+
+      <!-- Coluna 2: Publicações -->
+      <main class="col-md-6 main">
+        <h1 class="text-center mb-4">Publicações</h1>
+        
+        <!-- Publicação 1 -->
+        <div class="publicacao mb-4 p-3 bg-white rounded">
+          <img src="img/suscuz.webp" alt="Prato 1" class="img-fluid rounded mb-2">
+          <h2>Cuscuz</h2>
+          <p class="legenda">Restaurante Sabor do Brasil - Ipatinga</p>
+          <div class="interacoes d-flex gap-4 mt-2">
+            <div class="interacao" onclick="interagir('like', 1)">
+              <i class="fas fa-thumbs-up" style="color: green;"></i>
+              <span id="like-1">0</span>
+            </div>
+            <div class="interacao" onclick="interagir('dislike', 1)">
+              <i class="fas fa-thumbs-down" style="color: red;"></i>
+              <span id="dislike-1">0</span>
+            </div>
+            <div class="interacao" onclick="interagir('comentario', 1)">
+             <i class="bi bi-chat-right-text-fill" style="color:black;"></i>
+              <span id="comentario-1">0</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Publicação 2 -->
+        <div class="publicacao mb-4 p-3 bg-white rounded">
+          <img src="img/steaktartare.jpg" alt="Prato 2" class="img-fluid rounded mb-2">
+          <h2>Steak Tartare</h2>
+          <p class="legenda">Restaurante Sabor do Brasil - Ipatinga</p>
+          <div class="interacoes d-flex gap-4 mt-2">
+            <div class="interacao" onclick="interagir('like', 2)">
+              <i class="fas fa-thumbs-up" style="color: green;"></i>
+              <span id="like-2">0</span>
+            </div>
+            <div class="interacao" onclick="interagir('dislike', 2)">
+              <i class="fas fa-thumbs-down" style="color: red;"></i>
+              <span id="dislike-2">0</span>
+            </div>
+            <div class="interacao" onclick="interagir('comentario', 2)">
+              <i class="bi bi-chat-right-text-fill" style="color:black;"></i
+              <span id="comentario-2">0</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Publicação 3 -->
+        <div class="publicacao mb-4 p-3 bg-white rounded">
+          <img src="img/bobodecamarao.jpg" alt="Prato 3" class="img-fluid rounded mb-2">
+          <h2>Bobó de Camarão</h2>
+          <p class="legenda">Restaurante Sabor do Brasil - Ipatinga</p>
+          <div class="interacoes d-flex gap-4 mt-2">
+            <div class="interacao" onclick="interagir('like', 3)">
+              <i class="fas fa-thumbs-up" style="color: green;"></i>
+              <span id="like-3">0</span>
+            </div>
+            <div class="interacao" onclick="interagir('dislike', 3)">
+              <i class="fas fa-thumbs-down" style="color: red;"></i>
+              <span id="dislike-3">0</span>
+            </div>
+            <div class="interacao" onclick="interagir('comentario', 3)">
+              <i class="bi bi-chat-right-text-fill" style="color:black;"></i
+              <span id="comentario-3">0</span>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+
+      <!-- Coluna 3: Login -->
+      <aside class="col-md-3 login d-flex align-items-start justify-content-center">
+        <button class="btn btn-warning mt-3" onclick="abrirModalLogin()">Entrar</button>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Modifique a estrutura das colunas assim: -->
+<div class="row justify-content-center"> <!-- Centraliza as colunas -->
+  <!-- Coluna 1: Perfil (reduzida) -->
+  <aside class="col-lg-2 col-md-3 perfil text-center">
+    <!-- conteúdo permanece o mesmo -->
+  </aside>
+
+  <!-- Coluna 2: Publicações (principal) -->
+  <main class="col-lg-6 col-md-8 main"> <!-- Alterado para col-lg-6 -->
+    <!-- conteúdo permanece o mesmo -->
+  </main>
+
+  <!-- Coluna 3: Login (reduzida) -->
+  <aside class="col-lg-2 col-md-3 login d-flex align-items-start justify-content-center">
+    <!-- conteúdo permanece o mesmo -->
+  </aside>
+</div>
+
+
+
+    <!-- Rodapé -->
+  <footer class="footer text-white d-flex justify-content-between align-items-center px-4 py-2 mt-5">
+    <span>Sabor do Brasil</span>
+    <div class="redes d-flex gap-3">
+      <a href="https://instagram.com" target="_blank" class="text-white">
+        <i class="fab fa-instagram fa-lg"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" class="text-white">
+        <i class="fab fa-twitter fa-lg"></i>
+      </a>
+      <a href="https://wa.me/5599999999999" target="_blank" class="text-white">
+        <i class="fab fa-whatsapp fa-lg"></i>
+      </a>
+      <a href="https://suaempresa.com" target="_blank" class="text-white">
+        <i class="fas fa-globe fa-lg"></i>
+      </a>
+    </div>
+    <span>&copy; Copyright 2025</span>
+  </footer>
+
+  <script>
+    let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    let usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado')) || null;
+  
+    function abrirModalLogin() {
+      document.getElementById('modal-login').classList.remove('d-none');
+    }
+  
+    function fecharModalLogin() {
+      document.getElementById('modal-login').classList.add('d-none');
+    }
+  
+    function abrirModalCadastro() {
+      fecharModalLogin();
+      document.getElementById('modal-cadastro').classList.remove('d-none');
+    }
+  
+    function fecharModalCadastro() {
+      document.getElementById('modal-cadastro').classList.add('d-none');
+    }
+
+    function alternarParaLogin() {
+  fecharModalCadastro();
+  abrirModalLogin();
+}
+
+// Fechar modal ao clicar fora do conteúdo
+window.addEventListener('click', function(event) {
+  const modals = document.querySelectorAll('.modal-login.active');
+  modals.forEach(modal => {
+    if (event.target === modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+  });
+});
+  
+    function cadastrarUsuario() {
+      const nome = document.getElementById('nome-cadastro').value.trim();
+      const email = document.getElementById('email-cadastro').value.trim();
+      const senha = document.getElementById('senha-cadastro').value;
+  
+      if (!nome || !email || !senha) {
+        document.getElementById('erro-cadastro').classList.remove('d-none');
+        return;
+      }
+  
+      if (usuarios.find(u => u.email === email)) {
+        alert('Usuário já cadastrado!');
+        return;
+      }
+  
+      usuarios.push({ nome, email, senha });
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+      alert('Usuário cadastrado com sucesso!');
+      fecharModalCadastro();
+    }
+  
+    function validarLogin() {
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+  
+      const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+  
+      if (usuario) {
+        usuarioLogado = usuario;
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        fecharModalLogin();
+        atualizarInterface();
+      } else {
+        document.getElementById('erro-credenciais').classList.remove('d-none');
+      }
+    }
+  
+    function atualizarInterface() {
+      const botaoLogin = document.querySelector('.login');
+      if (usuarioLogado) {
+        botaoLogin.innerHTML = `
+          <div class="text-center mt-3">
+            <p><strong>${usuarioLogado.nome}</strong></p>
+            <button class="btn btn-outline-danger btn-sm" onclick="logout()">Sair</button>
+          </div>
+        `;
+      }
+    }
+  
+    function logout() {
+      usuarioLogado = null;
+      localStorage.removeItem('usuarioLogado');
+      location.reload();
+    }
+  
+    function interagir(tipo, id) {
+      if (!usuarioLogado) {
+        alert("Você precisa estar logado para interagir!");
+        return;
+      }
+  
+      const contador = document.getElementById(`${tipo}-${id}`);
+      contador.innerText = parseInt(contador.innerText) + 1;
+  
+      // Atualiza contador geral
+      if (tipo === 'like') {
+        const geral = document.getElementById('likes-gerais');
+        geral.innerText = parseInt(geral.innerText) + 1;
+      } else if (tipo === 'dislike') {
+        const geral = document.getElementById('dislikes-gerais');
+        geral.innerText = parseInt(geral.innerText) + 1;
+      } else if (tipo === 'comentario') {
+        const comentario = prompt("Digite seu comentário:");
+        if (comentario) {
+          alert(`Comentário enviado: ${comentario}`);
+        }
+      }
+    }
+  
+    atualizarInterface();
+  </script>
+    
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
