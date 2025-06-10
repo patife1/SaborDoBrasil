@@ -8,7 +8,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 </head>
-<body> 
+<body>
+  <div id="bloqueio-site" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.98);z-index:9999;display:none;align-items:center;justify-content:center;flex-direction:column;">
+    <h2 class="mb-4">Bem-vindo ao Sabor do Brasil</h2>
+    <button class="btn btn-warning" onclick="abrirModalLogin()">Fazer Login</button>
+    <p class="mt-3">Não tem conta? <a href="#" onclick="abrirModalCadastro()">Cadastre-se</a></p>
+  </div>
 
   <!-- Modal de Login -->
 <div id="modal-login" class="modal-login d-none">
@@ -197,122 +202,171 @@
   </footer>
 
   <script>
-    let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-    let usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado')) || null;
-  
-    function abrirModalLogin() {
-      document.getElementById('modal-login').classList.remove('d-none');
-    }
-  
-    function fecharModalLogin() {
-      document.getElementById('modal-login').classList.add('d-none');
-    }
-  
-    function abrirModalCadastro() {
-      fecharModalLogin();
-      document.getElementById('modal-cadastro').classList.remove('d-none');
-    }
-  
-    function fecharModalCadastro() {
-      document.getElementById('modal-cadastro').classList.add('d-none');
-    }
+    // Substitui as funções de login/cadastro para ficarem parecidas com o repositório skazzi47/SaborDoBrasil
+window.usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado')) || null;
 
-    function alternarParaLogin() {
-  fecharModalCadastro();
-  abrirModalLogin();
+window.abrirModalLogin = function() {
+  var modal = document.getElementById('modal-login');
+  modal.classList.remove('d-none');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('erro-credenciais').classList.add('d-none');
+}
+
+window.fecharModalLogin = function() {
+  var modal = document.getElementById('modal-login');
+  modal.classList.add('d-none');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+window.abrirModalCadastro = function() {
+  window.fecharModalLogin();
+  var modal = document.getElementById('modal-cadastro');
+  modal.classList.remove('d-none');
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('erro-cadastro').classList.add('d-none');
+}
+
+window.fecharModalCadastro = function() {
+  var modal = document.getElementById('modal-cadastro');
+  modal.classList.add('d-none');
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+function cadastrarUsuario() {
+  const nome = document.getElementById('nome-cadastro').value.trim();
+  const email = document.getElementById('email-cadastro').value.trim();
+  const senha = document.getElementById('senha-cadastro').value;
+  const erroCadastro = document.getElementById('erro-cadastro');
+  erroCadastro.classList.add('d-none');
+
+  if (!nome || !email || !senha) {
+    erroCadastro.textContent = 'Preencha todos os campos corretamente.';
+    erroCadastro.classList.remove('d-none');
+    return;
+  }
+
+  // Simula backend localStorage
+  let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+  if (usuarios.find(u => u.email === email)) {
+    erroCadastro.textContent = 'Usuário já cadastrado.';
+    erroCadastro.classList.remove('d-none');
+    return;
+  }
+  const novoUsuario = { nome, email, senha, fotoPerfil: '/img/logo_sabor_do_brasil.png' };
+  usuarios.push(novoUsuario);
+  localStorage.setItem('usuarios', JSON.stringify(usuarios));
+  alert('Usuário cadastrado com sucesso!');
+  window.fecharModalCadastro();
+  window.abrirModalLogin();
+}
+
+function validarLogin() {
+  const email = document.getElementById('email').value.trim();
+  const senha = document.getElementById('senha').value;
+  const erroCredenciais = document.getElementById('erro-credenciais');
+  erroCredenciais.classList.add('d-none');
+  if (!email || !senha) {
+    erroCredenciais.textContent = 'Preencha todos os campos.';
+    erroCredenciais.classList.remove('d-none');
+    return;
+  }
+  let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+  const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+  if (usuario) {
+    window.usuarioLogado = usuario;
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+    window.fecharModalLogin();
+    atualizarInterface();
+  } else {
+    erroCredenciais.textContent = 'Usuário ou senha incorretos.';
+    erroCredenciais.classList.remove('d-none');
+  }
+}
+
+function atualizarInterface() {
+  const botaoLogin = document.querySelector('.login');
+  if (window.usuarioLogado) {
+    botaoLogin.innerHTML = `
+      <div class="text-center mt-3">
+        <div style='display: flex; flex-direction: column; align-items: center;'>
+          <img src="${window.usuarioLogado.fotoPerfil || '/img/logo_sabor_do_brasil.png'}" alt="Foto de Perfil" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--laranja); margin-bottom: 6px; cursor:pointer;" onclick="abrirModalPerfil()">
+          <p style='margin-bottom: 8px;'><strong>${window.usuarioLogado.nome}</strong></p>
+        </div>
+        <button class="btn btn-outline-danger btn-sm" onclick="logout()">Sair</button>
+      </div>
+    `;
+  } else {
+    botaoLogin.innerHTML = `<button class='btn btn-warning mt-3' onclick='abrirModalLogin()'>Entrar</button>`;
+  }
+}
+
+function logout() {
+  window.usuarioLogado = null;
+  localStorage.removeItem('usuarioLogado');
+  atualizarInterface();
 }
 
 // Fechar modal ao clicar fora do conteúdo
-window.addEventListener('click', function(event) {
-  const modals = document.querySelectorAll('.modal-login.active');
-  modals.forEach(modal => {
-    if (event.target === modal) {
-      modal.classList.remove('active');
-      document.body.style.overflow = 'auto';
+window.addEventListener('mousedown', function(event) {
+  var modalLogin = document.getElementById('modal-login');
+  var modalCadastro = document.getElementById('modal-cadastro');
+  if (modalLogin.classList.contains('active') && event.target === modalLogin) {
+    window.fecharModalLogin();
+  }
+  if (modalCadastro.classList.contains('active') && event.target === modalCadastro) {
+    window.fecharModalCadastro();
+  }
+});
+
+// Fechar modal ao pressionar ESC
+window.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    if (!document.getElementById('modal-login').classList.contains('d-none')) window.fecharModalLogin();
+    if (!document.getElementById('modal-cadastro').classList.contains('d-none')) window.fecharModalCadastro();
+  }
+});
+
+// Alternar visualização da senha no login
+const senhaInput = document.getElementById('senha');
+const toggleSenha = document.getElementById('toggleSenha');
+const iconeOlho = document.getElementById('iconeOlho');
+if (toggleSenha && senhaInput && iconeOlho) {
+  toggleSenha.addEventListener('click', function() {
+    if (senhaInput.type === 'password') {
+      senhaInput.type = 'text';
+      iconeOlho.classList.remove('fa-eye');
+      iconeOlho.classList.add('fa-eye-slash');
+    } else {
+      senhaInput.type = 'password';
+      iconeOlho.classList.remove('fa-eye-slash');
+      iconeOlho.classList.add('fa-eye');
     }
   });
-});
-  
-    function cadastrarUsuario() {
-      const nome = document.getElementById('nome-cadastro').value.trim();
-      const email = document.getElementById('email-cadastro').value.trim();
-      const senha = document.getElementById('senha-cadastro').value;
-  
-      if (!nome || !email || !senha) {
-        document.getElementById('erro-cadastro').classList.remove('d-none');
-        return;
-      }
-  
-      if (usuarios.find(u => u.email === email)) {
-        alert('Usuário já cadastrado!');
-        return;
-      }
-  
-      usuarios.push({ nome, email, senha });
-      localStorage.setItem('usuarios', JSON.stringify(usuarios));
-      alert('Usuário cadastrado com sucesso!');
-      fecharModalCadastro();
+}
+// Alternar visualização da senha no cadastro
+const senhaCadastroInput = document.getElementById('senha-cadastro');
+const toggleSenhaCadastro = document.getElementById('toggleSenhaCadastro');
+const iconeOlhoCadastro = document.getElementById('iconeOlhoCadastro');
+if (toggleSenhaCadastro && senhaCadastroInput && iconeOlhoCadastro) {
+  toggleSenhaCadastro.addEventListener('click', function() {
+    if (senhaCadastroInput.type === 'password') {
+      senhaCadastroInput.type = 'text';
+      iconeOlhoCadastro.classList.remove('fa-eye');
+      iconeOlhoCadastro.classList.add('fa-eye-slash');
+    } else {
+      senhaCadastroInput.type = 'password';
+      iconeOlhoCadastro.classList.remove('fa-eye-slash');
+      iconeOlhoCadastro.classList.add('fa-eye');
     }
-  
-    function validarLogin() {
-      const email = document.getElementById('email').value.trim();
-      const senha = document.getElementById('senha').value;
-  
-      const usuario = usuarios.find(u => u.email === email && u.senha === senha);
-  
-      if (usuario) {
-        usuarioLogado = usuario;
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-        fecharModalLogin();
-        atualizarInterface();
-      } else {
-        document.getElementById('erro-credenciais').classList.remove('d-none');
-      }
-    }
-  
-    function atualizarInterface() {
-      const botaoLogin = document.querySelector('.login');
-      if (usuarioLogado) {
-        botaoLogin.innerHTML = `
-          <div class="text-center mt-3">
-            <p><strong>${usuarioLogado.nome}</strong></p>
-            <button class="btn btn-outline-danger btn-sm" onclick="logout()">Sair</button>
-          </div>
-        `;
-      }
-    }
-  
-    function logout() {
-      usuarioLogado = null;
-      localStorage.removeItem('usuarioLogado');
-      location.reload();
-    }
-  
-    function interagir(tipo, id) {
-      if (!usuarioLogado) {
-        alert("Você precisa estar logado para interagir!");
-        return;
-      }
-  
-      const contador = document.getElementById(`${tipo}-${id}`);
-      contador.innerText = parseInt(contador.innerText) + 1;
-  
-      // Atualiza contador geral
-      if (tipo === 'like') {
-        const geral = document.getElementById('likes-gerais');
-        geral.innerText = parseInt(geral.innerText) + 1;
-      } else if (tipo === 'dislike') {
-        const geral = document.getElementById('dislikes-gerais');
-        geral.innerText = parseInt(geral.innerText) + 1;
-      } else if (tipo === 'comentario') {
-        const comentario = prompt("Digite seu comentário:");
-        if (comentario) {
-          alert(`Comentário enviado: ${comentario}`);
-        }
-      }
-    }
-  
-    atualizarInterface();
+  });
+}
+
+// Atualiza interface ao carregar
+window.onload = atualizarInterface;
   </script>
     
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
