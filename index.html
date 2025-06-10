@@ -310,6 +310,63 @@ function logout() {
   atualizarInterface();
 }
 
+// Função para interações (like, dislike, comentário) com controle por usuário logado
+function interagir(tipo, id) {
+  if (!window.usuarioLogado) {
+    alert("Você precisa estar logado para interagir!");
+    return;
+  }
+  let interacoesPorUsuario = JSON.parse(localStorage.getItem('interacoesPorUsuario') || '{}');
+  const email = window.usuarioLogado.email;
+  if (!interacoesPorUsuario[email]) interacoesPorUsuario[email] = {};
+  if (!interacoesPorUsuario[email][id]) interacoesPorUsuario[email][id] = { like: false, dislike: false, comentarios: [] };
+  if (tipo === 'like') {
+    if (interacoesPorUsuario[email][id].like) {
+      alert('Você já curtiu esta publicação!');
+      return;
+    }
+    if (interacoesPorUsuario[email][id].dislike) {
+      alert('Você já deu dislike nesta publicação!');
+      return;
+    }
+    interacoesPorUsuario[email][id].like = true;
+  } else if (tipo === 'dislike') {
+    if (interacoesPorUsuario[email][id].dislike) {
+      alert('Você já deu dislike nesta publicação!');
+      return;
+    }
+    if (interacoesPorUsuario[email][id].like) {
+      alert('Você já curtiu esta publicação!');
+      return;
+    }
+    interacoesPorUsuario[email][id].dislike = true;
+  } else if (tipo === 'comentario') {
+    const comentario = prompt("Digite seu comentário:");
+    if (comentario) {
+      interacoesPorUsuario[email][id].comentarios.push({
+        texto: comentario,
+        data: new Date().toLocaleString(),
+        nome: window.usuarioLogado.nome
+      });
+      alert(`Comentário salvo!`);
+    } else {
+      return;
+    }
+  }
+  localStorage.setItem('interacoesPorUsuario', JSON.stringify(interacoesPorUsuario));
+  const contador = document.getElementById(`${tipo}-${id}`);
+  if (contador) {
+    contador.innerText = parseInt(contador.innerText) + 1;
+  }
+  if (tipo === 'like') {
+    const geral = document.getElementById('likes-gerais');
+    if (geral) geral.innerText = parseInt(geral.innerText) + 1;
+  } else if (tipo === 'dislike') {
+    const geral = document.getElementById('dislikes-gerais');
+    if (geral) geral.innerText = parseInt(geral.innerText) + 1;
+  }
+}
+
 // Fechar modal ao clicar fora do conteúdo
 window.addEventListener('mousedown', function(event) {
   var modalLogin = document.getElementById('modal-login');
