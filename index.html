@@ -236,7 +236,8 @@ window.fecharModalCadastro = function() {
   document.body.style.overflow = 'auto';
 }
 
-function cadastrarUsuario() {
+// Função para cadastrar usuário usando a API REST
+async function cadastrarUsuario() {
   const nome = document.getElementById('nome-cadastro').value.trim();
   const email = document.getElementById('email-cadastro').value.trim();
   const senha = document.getElementById('senha-cadastro').value;
@@ -249,22 +250,29 @@ function cadastrarUsuario() {
     return;
   }
 
-  // Simula backend localStorage
-  let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  if (usuarios.find(u => u.email === email)) {
-    erroCadastro.textContent = 'Usuário já cadastrado.';
+  try {
+    const resp = await fetch('http://localhost:3001/api/usuarios/cadastrar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, senha })
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      alert('Usuário cadastrado com sucesso!');
+      window.fecharModalCadastro();
+      window.abrirModalLogin();
+    } else {
+      erroCadastro.textContent = data.erro || 'Erro ao cadastrar usuário.';
+      erroCadastro.classList.remove('d-none');
+    }
+  } catch (e) {
+    erroCadastro.textContent = 'Erro de conexão com o servidor.';
     erroCadastro.classList.remove('d-none');
-    return;
   }
-  const novoUsuario = { nome, email, senha, fotoPerfil: '/img/logo_sabor_do_brasil.png' };
-  usuarios.push(novoUsuario);
-  localStorage.setItem('usuarios', JSON.stringify(usuarios));
-  alert('Usuário cadastrado com sucesso!');
-  window.fecharModalCadastro();
-  window.abrirModalLogin();
 }
 
-function validarLogin() {
+// Função para login usando a API REST
+async function validarLogin() {
   const email = document.getElementById('email').value.trim();
   const senha = document.getElementById('senha').value;
   const erroCredenciais = document.getElementById('erro-credenciais');
@@ -274,15 +282,24 @@ function validarLogin() {
     erroCredenciais.classList.remove('d-none');
     return;
   }
-  let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-  const usuario = usuarios.find(u => u.email === email && u.senha === senha);
-  if (usuario) {
-    window.usuarioLogado = usuario;
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-    window.fecharModalLogin();
-    atualizarInterface();
-  } else {
-    erroCredenciais.textContent = 'Usuário ou senha incorretos.';
+  try {
+    const resp = await fetch('http://localhost:3001/api/usuarios/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha })
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      window.usuarioLogado = data;
+      localStorage.setItem('usuarioLogado', JSON.stringify(data));
+      window.fecharModalLogin();
+      atualizarInterface();
+    } else {
+      erroCredenciais.textContent = data.erro || 'Usuário ou senha incorretos.';
+      erroCredenciais.classList.remove('d-none');
+    }
+  } catch (e) {
+    erroCredenciais.textContent = 'Erro de conexão com o servidor.';
     erroCredenciais.classList.remove('d-none');
   }
 }
@@ -310,50 +327,40 @@ function logout() {
   atualizarInterface();
 }
 
-// Função para interações (like, dislike, comentário) com controle por usuário logado
-function interagir(tipo, id) {
+// Função para interagir (like, dislike, comentário) usando a API REST
+async function interagir(tipo, id) {
   if (!window.usuarioLogado) {
     alert("Você precisa estar logado para interagir!");
     return;
   }
-  let interacoesPorUsuario = JSON.parse(localStorage.getItem('interacoesPorUsuario') || '{}');
-  const email = window.usuarioLogado.email;
-  if (!interacoesPorUsuario[email]) interacoesPorUsuario[email] = {};
-  if (!interacoesPorUsuario[email][id]) interacoesPorUsuario[email][id] = { like: false, dislike: false, comentarios: [] };
-  if (tipo === 'like') {
-    if (interacoesPorUsuario[email][id].like) {
-      alert('Você já curtiu esta publicação!');
-      return;
-    }
-    if (interacoesPorUsuario[email][id].dislike) {
-      alert('Você já deu dislike nesta publicação!');
-      return;
-    }
-    interacoesPorUsuario[email][id].like = true;
-  } else if (tipo === 'dislike') {
-    if (interacoesPorUsuario[email][id].dislike) {
-      alert('Você já deu dislike nesta publicação!');
-      return;
-    }
-    if (interacoesPorUsuario[email][id].like) {
-      alert('Você já curtiu esta publicação!');
-      return;
-    }
-    interacoesPorUsuario[email][id].dislike = true;
-  } else if (tipo === 'comentario') {
-    const comentario = prompt("Digite seu comentário:");
-    if (comentario) {
-      interacoesPorUsuario[email][id].comentarios.push({
-        texto: comentario,
-        data: new Date().toLocaleString(),
-        nome: window.usuarioLogado.nome
-      });
-      alert(`Comentário salvo!`);
-    } else {
-      return;
-    }
+  let comentario = undefined;
+  if (tipo === 'comentario') {
+    comentario = prompt("Digite seu comentário:");
+    if (!comentario) return;
   }
-  localStorage.setItem('interacoesPorUsuario', JSON.stringify(interacoesPorUsuario));
+  try {
+    const resp = await fetch(`http://localhost:3001/api/publicacoes/${id}/interagir`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo, comentario, usuario_email: window.usuarioLogado.email })
+    });
+    const data = await resp.json();
+    if (resp.ok) {
+      if (tipo === 'like' || tipo === 'dislike') {
+        atualizarContadores(id, tipo);
+      } else if (tipo === 'comentario') {
+        alert('Comentário salvo!');
+      }
+    } else {
+      alert(data.erro || 'Erro ao interagir.');
+    }
+  } catch (e) {
+    alert('Erro de conexão com o servidor.');
+  }
+}
+
+// Atualiza contadores de likes/dislikes/comentários na interface (pode ser aprimorado para buscar do backend)
+function atualizarContadores(id, tipo) {
   const contador = document.getElementById(`${tipo}-${id}`);
   if (contador) {
     contador.innerText = parseInt(contador.innerText) + 1;
@@ -366,6 +373,114 @@ function interagir(tipo, id) {
     if (geral) geral.innerText = parseInt(geral.innerText) + 1;
   }
 }
+
+// Função para buscar e exibir publicações do backend
+async function carregarPublicacoes() {
+  try {
+    const resp = await fetch('http://localhost:3001/api/publicacoes');
+    const publicacoes = await resp.json();
+    if (Array.isArray(publicacoes)) {
+      const main = document.querySelector('.main');
+      main.innerHTML = '<h1 class="text-center mb-4">Publicações</h1>';
+      publicacoes.forEach(pub => {
+        main.innerHTML += `
+        <div class="publicacao mb-4 p-3 bg-white rounded">
+          <img src="${pub.imagem || 'img/logo_sabor_do_brasil.png'}" alt="Prato" class="img-fluid rounded mb-2">
+          <h2>${pub.titulo}</h2>
+          <p class="legenda">${pub.legenda || ''}</p>
+          <div class="interacoes d-flex gap-4 mt-2">
+            <div class="interacao" onclick="interagir('like', ${pub.id})">
+              <i class="fas fa-thumbs-up" style="color: green;"></i>
+              <span id="like-${pub.id}">${pub.likes || 0}</span>
+            </div>
+            <div class="interacao" onclick="interagir('dislike', ${pub.id})">
+              <i class="fas fa-thumbs-down" style="color: red;"></i>
+              <span id="dislike-${pub.id}">${pub.dislikes || 0}</span>
+            </div>
+            <div class="interacao" onclick="exibirComentarios(${pub.id})">
+              <i class="bi bi-chat-right-text-fill" style="color:black;"></i>
+              <span id="comentario-${pub.id}">${pub.comentarios || 0}</span>
+            </div>
+          </div>
+        </div>`;
+      });
+      atualizarOnClickComentarios();
+    }
+  } catch (e) {
+    const main = document.querySelector('.main');
+    main.innerHTML = '<p class="text-danger">Erro ao carregar publicações.</p>';
+  }
+}
+
+// Função para buscar e exibir comentários de uma publicação
+async function exibirComentarios(id) {
+  try {
+    const resp = await fetch(`http://localhost:3001/api/publicacoes/${id}/comentarios`);
+    const comentarios = await resp.json();
+    if (Array.isArray(comentarios)) {
+      let lista = 'Comentários:\n';
+      comentarios.forEach(c => {
+        lista += `- ${c.nome}: ${c.texto} (${c.data})\n`;
+      });
+      alert(lista);
+    }
+  } catch (e) {
+    alert('Erro ao carregar comentários.');
+  }
+}
+
+// Modifica o onclick dos comentários para exibir lista
+function atualizarOnClickComentarios() {
+  document.querySelectorAll('.interacao').forEach(el => {
+    if (el.innerHTML.includes('bi-chat-right-text-fill')) {
+      const id = el.getAttribute('onclick').match(/\d+/)[0];
+      el.setAttribute('onclick', `exibirComentarios(${id})`);
+    }
+  });
+}
+
+// Chama após carregar publicacoes
+async function carregarPublicacoes() {
+  try {
+    const resp = await fetch('http://localhost:3001/api/publicacoes');
+    const publicacoes = await resp.json();
+    if (Array.isArray(publicacoes)) {
+      const main = document.querySelector('.main');
+      main.innerHTML = '<h1 class="text-center mb-4">Publicações</h1>';
+      publicacoes.forEach(pub => {
+        main.innerHTML += `
+        <div class="publicacao mb-4 p-3 bg-white rounded">
+          <img src="${pub.imagem || 'img/logo_sabor_do_brasil.png'}" alt="Prato" class="img-fluid rounded mb-2">
+          <h2>${pub.titulo}</h2>
+          <p class="legenda">${pub.legenda || ''}</p>
+          <div class="interacoes d-flex gap-4 mt-2">
+            <div class="interacao" onclick="interagir('like', ${pub.id})">
+              <i class="fas fa-thumbs-up" style="color: green;"></i>
+              <span id="like-${pub.id}">${pub.likes || 0}</span>
+            </div>
+            <div class="interacao" onclick="interagir('dislike', ${pub.id})">
+              <i class="fas fa-thumbs-down" style="color: red;"></i>
+              <span id="dislike-${pub.id}">${pub.dislikes || 0}</span>
+            </div>
+            <div class="interacao" onclick="exibirComentarios(${pub.id})">
+              <i class="bi bi-chat-right-text-fill" style="color:black;"></i>
+              <span id="comentario-${pub.id}">${pub.comentarios || 0}</span>
+            </div>
+          </div>
+        </div>`;
+      });
+      atualizarOnClickComentarios();
+    }
+  } catch (e) {
+    const main = document.querySelector('.main');
+    main.innerHTML = '<p class="text-danger">Erro ao carregar publicações.</p>';
+  }
+}
+
+window.onload = function() {
+  atualizarInterface();
+  carregarPublicacoes();
+};
 
 // Fechar modal ao clicar fora do conteúdo
 window.addEventListener('mousedown', function(event) {
